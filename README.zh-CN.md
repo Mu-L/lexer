@@ -7,7 +7,7 @@
     <img src="https://img.shields.io/badge/JavaScript-ES5+-blue.svg">
     <img src="https://img.shields.io/npm/dt/chain-lexer.svg">
     <a href="https://app.travis-ci.com/github/WGrape/lexer"><img src="https://app.travis-ci.com/WGrape/lexer.svg?branch=main"><a>
-    <img src="https://img.shields.io/badge/Release-1.8.0-blue.svg">
+    <img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/wgrape/lexer">
     <img src="https://img.shields.io/badge/Document-中文/English-orange.svg">
     <img src="https://img.shields.io/badge/License-MIT-green.svg">   
 </p>
@@ -36,10 +36,12 @@
 - &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(2) 可视化预览与测试](#42)
 - [5、参与贡献](#5)
 - &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(1) 项目统计](#51)
-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(2) 源码讲解](#52)
-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(3) 贡献范围](#53)
-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(4) 版本发布](#54)
-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(5) 问题交流](#55)
+- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(2) 分支介绍](#52)
+- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(3) 提交规范](#53)
+- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(4) 贡献范围](#54)
+- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(5) 版本发布](#55)
+- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(6) 源码讲解](#56)
+- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(7) 问题交流](#57)
 - [6、协议说明](#6)
 
 </details>
@@ -89,6 +91,8 @@
 ## <span id="3">3、获取项目</span>
 
 使用```git clone```获取本项目后，不需要任何依赖的安装，也不需多余的安装步骤
+
+> **分支说明**：`main` 分支是主分支，以 `main` 分支为主即可，其他分支都是功能开发分支。包括 `main` 分支在内的所有分支都会进行新功能的迭代，尽管 `main` 分支已经过多次测试，但新功能仍可能引起 bug。你可以根据自己的选择，也可以下载更稳定的 [Release 版本](https://github.com/WGrape/lexer/releases)
 
 ## <span id="4">4、使用方式</span>
 
@@ -159,22 +163,47 @@ if(a == b){
 ### <span id="51">(1) 项目统计</span>
 <a href="https://starchart.cc/WGrape/lexer"><img src="https://starchart.cc/WGrape/lexer.svg" width="700"></a>
 
-### <span id="52">(2) 源码讲解</span>
-关于项目设计、单元测试、自动化测试、开发规范、以及如何接入不同语言的扩展等与源码开发相关的文档，请阅读[源码讲解](/doc/explain.md)部分
+### <span id="52">(2) 分支介绍</span>
+- `main`：主分支
+- `develop`：开发分支
+- `testing`：已废弃，不再使用
+- `v{x}`：版本分支（如 `v2`，表示 version 2 版本的分支），一般不使用。只有在做大版本更新时，会创建一个版本分支，然后把 `develop` 分支开发的代码先合入 `v{x}` 分支，待版本完全测试通过后，才会合入 `main` 分支
 
-### <span id="53">(3) 贡献范围</span>
+### <span id="53">(3) 提交规范</span>
+
+- ```test```: 测试相关的英文描述
+- ```perf```: 优化相关的英文描述
+- ```feat```: 新功能相关的英文描述
+- ```fix```: bug修复相关的英文描述
+- ```doc```: 文档更新相关的英文描述
+- ```style```: 代码格式调整相关的英文描述
+- ```refactor```: 设计架构重构相关的英文描述  
+
+如lexer的架构如果进行调整，commit信息应该为```refactor: refactor lexer```
+
+### <span id="54">(4) 贡献范围</span>
 - 提供更多新功能
 - 提供更多语言的 ```/src/lang/{lang}-define.js```
 
-此外，一切帮助项目变得更好的建议都欢迎讨论，交流渠道参考[问题交流](#55)部分
+此外，一切帮助项目变得更好的建议都欢迎讨论，交流渠道参考[问题交流](#57)部分
 
-### <span id="54">(4) 版本发布</span>
+### <span id="55">(5) 版本发布</span>
 项目以版本号为```大更新-小更新-修复完善```的规则发布，关于版本的更新记录可以查看项目的[CHANGELOG](./CHANGELOG.md)，或查看[Release记录](https://github.com/WGrape/lexer/releases)
 
-### <span id="55">(5) 问题交流</span>
-如果有使用问题或疑问需要反馈，可以<a href="https://qm.qq.com/cgi-bin/qm/qr?k=088TusnG1yLi--mr8v02PINh7thvjQD9&jump_from=webapi">加入群聊</a>，或[提交issue](https://github.com/WGrape/lexer/issues/new) ，欢迎大家的加入
+当新版本开发完成后，使用如下命令发布至Npm。
 
-<a href="https://qm.qq.com/cgi-bin/qm/qr?k=088TusnG1yLi--mr8v02PINh7thvjQD9&jump_from=webapi"><img width="200" src="https://user-images.githubusercontent.com/35942268/135754608-29ca599e-b8a6-4ad2-ae62-c4ee5d61d1f9.png" /></a>
+```bash
+git checkout main
+git pull origin main
+npm login
+npm publish
+```
+
+### <span id="56">(6) 源码讲解</span>
+关于项目设计、单元测试、自动化测试、开发规范、以及如何接入不同语言的扩展等与源码开发相关的文档，请阅读[源码讲解](/doc/explain.md)部分
+
+### <span id="57">(7) 问题交流</span>
+如果有使用问题或疑问需要反馈，请[提交issue](https://github.com/WGrape/lexer/issues/new) ，欢迎大家的加入
 
 ## <span id="6">6、协议说明</span>
 

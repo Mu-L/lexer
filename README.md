@@ -34,10 +34,12 @@
 - &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(2) Web preview and testing](#42)
 - [5、Contributions](#5)
 - &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(1) Project Statistics](#51)
-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(2) Source code explanation](#52)
-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(3) Content contribution](#53)
-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(4) Release version](#54)
-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(5) Q&A](#55)
+- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(2) Branch Introduction](#52)
+- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(3) Commit Standards](#53)
+- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(4) Content contribution](#54)
+- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(5) Release version](#55)
+- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(6) Source code explanation](#56)
+- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(7) Q&amp;A](#57)
 - [6、License](#6)
 
 </details>
@@ -63,9 +65,9 @@ In order to focus on the working principle of lexical analyzer , not to consider
 
 ### <span id="21">(1) Complete lexical analysis</span>
 
-From inputting the character sequence to generating ```token``` after the analysis, ```lexer``` has complete steps for lexical analysis, and 12 token types for most language extensions
+From inputting the character sequence to generating ```token``` after the analysis, ```lexer``` has complete steps for lexical analysis, and 11 token types for most language extensions
 
-<img width="850" alt="" src="https://user-images.githubusercontent.com/35942268/137583888-8c12a85c-4af7-4288-942f-d2a2fcfe30c6.png">
+![img](/doc/image/c-tokens.png)
 
 ### <span id="22">(2) Support multi-language extension</span>
 
@@ -82,11 +84,13 @@ The core mechanism of lexical analyzer is based on the state flow of ```DFA```. 
 - Debug mode
 - Automatically generate ```DFA``` state flow diagram
 
-<img width="700" src="https://user-images.githubusercontent.com/35942268/136378451-e025fffd-425d-43f1-8a58-454a1011e9c3.png" />
+<img width="700" src="https://user-images.githubusercontent.com/35942268/135863402-4765e07b-01bf-41e7-b564-9d5af5faed63.png" />
 
 ## <span id="3">3、Get project</span>
 
 After ```git clone``` command, no need for any dependencies, and no extra installation steps
+
+> **Branch Note**: The `main` branch is the primary branch, please use the `main` branch. Other branches are for feature development. All branches including `main` will have new feature iterations. Although the `main` branch has been tested multiple times, new features may still cause bugs. You can choose according to your needs, or download a more stable [Release version](https://github.com/WGrape/lexer/releases)
 
 ## <span id="4">4、Ussage</span>
 
@@ -168,7 +172,7 @@ if(a == b){
 }
 ```
 
-![img](https://user-images.githubusercontent.com/35942268/137584888-28a1ce09-3474-4158-8e6f-ccbdb8614930.gif)
+![img](/doc/image/show-v2.gif)
 
 or check the [online website](wgrape.github.io/lexer/)
 
@@ -178,21 +182,48 @@ or check the [online website](wgrape.github.io/lexer/)
 
 <a href="https://starchart.cc/WGrape/lexer"><img src="https://starchart.cc/WGrape/lexer.svg" width="700"></a>
 
-### <span id="52">(2) Source code explanation</span>
-Documents about source code development, project design, unit testing, automated testing, development specifications, and how to make extensions in different languages, please read [source code explanation](/doc/explain.md)
+### <span id="52">(2) Branch Introduction</span>
+- `main`: Primary branch
+- `develop`: Development branch
+- `testing`: Deprecated, no longer used
+- `v{x}`: Version branch (e.g., `v2` indicates version 2 branch), generally not used. Only during major version updates, a version branch is created. Code from `develop` branch is first merged into `v{x}` branch, and only after the version is fully tested and approved, it is merged into `main` branch
 
-### <span id="53">(3) Content contribution</span>
+### <span id="53">(3) Commit Standards</span>
+
+- ```test```: Description related to testing
+- ```perf```: Description related to optimization
+- ```feat```: Description related to new features
+- ```fix```: Description related to bug fixes
+- ```doc```: Description related to documentation updates
+- ```style```: Description related to code formatting
+- ```refactor```: Description related to architectural refactoring
+
+For example, if the lexer architecture is adjusted, the commit message should be ```refactor: refactor lexer```
+
+### <span id="54">(4) Content contribution</span>
 - Add more new features
 - Add more extensions ```/src/lang/{lang}-define.js```
 
-### <span id="54">(4) Release version</span>
+### <span id="55">(5) Release version</span>
 The project is released with the version number of ```A-B-C```，regarding release log, you can check the [CHANGELOG](./CHANGELOG.md) or the [release record](https://github.com/WGrape/lexer/releases)
 
 - ```A```：Major upgrade
 - ```B```：Minor upgrade
 - ```C```：bug fix / features / ...
 
-### <span id="55">(5) Q&A</span>
+When a new version is ready, use the following commands to publish to npm:
+
+```bash
+git checkout main
+git pull origin main
+npm login
+npm publish
+```
+
+### <span id="56">(6) Source code explanation</span>
+Documents about source code development, project design, unit testing, automated testing, development specifications, and how to make extensions in different languages, please read [source code explanation](/doc/explain.md)
+
+### <span id="57">(7) Q&amp;A</span>
 If you have any problems or questions, please [submit an issue](https://github.com/WGrape/lexer/issues/new)
 
 ## <span id="6">6、License</span>
