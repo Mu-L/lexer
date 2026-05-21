@@ -7,7 +7,7 @@ function runUnitTesting(showProcess) {
     }
 
     function consoleFailed(message) {
-        console.error("\033[1;31m" + message + "\033[1;31m");
+        console.error("\x1B[1;31m" + message + "\x1B[1;31m");
     }
 
     if (tool.isUndefined(flowModel.FakeValue) === true) {

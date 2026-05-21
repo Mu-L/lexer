@@ -15,6 +15,13 @@
  *     通过 require('index.js') 模拟 npm 包使用方式，验证对外导出的 cLexer / sqlLexer 是否正常工作。
  *     测试用例同 test/auto/ 目录。
  *
+ * 为什么使用动态加载，而非在顶部静态 require：
+ *   1. 路径由运行时参数决定（lang、testFile），在模块加载阶段还不知道要加载哪个文件。
+ *   2. 所有测试文件（unit/ 和 auto/）都定义了同名函数，如 returnCaseList()、runUnitTesting()。
+ *      如果全部在顶部 require，后加载的会覆盖前面的，导致测试混乱。
+ *   3. 所有 min.js 都将词法分析器写入同一个 global.lexer 变量。
+ *      动态加载可确保 global.lexer 始终是当前测试所需的那个语言的实例。
+ *
  * 命令格式：
  *   node test/main.js <lang> <type> <testFile> <showProcess>
  *
@@ -61,6 +68,16 @@
  *   Type 3 - Npm Testing
  *     Simulates npm package usage via require('index.js') to verify that the exported
  *     cLexer / sqlLexer work correctly. Test cases are also in test/auto/.
+ *
+ * Why dynamic loading instead of static requires at the top:
+ *   1. The file paths depend on runtime arguments (lang, testFile) and are not
+ *      known at module load time.
+ *   2. All test files (unit/ and auto/) define functions with the same names, such as
+ *      returnCaseList() and runUnitTesting(). Static requires at the top would cause
+ *      later files to overwrite earlier ones, mixing up test cases.
+ *   3. All min.js files write their lexer instance to the same global.lexer variable.
+ *      Dynamic loading ensures global.lexer always holds the instance for the language
+ *      being tested.
  *
  * Command format:
  *   node test/main.js <lang> <type> <testFile> <showProcess>
@@ -123,7 +140,7 @@ function runCaseList(lexer, caseList, showProcess) {
         }
 
         if (failed) {
-            console.error("\033[1;31m" + 'Case ' + (i + 1) + ': failed | ' + 'input = ' + caseList[i].input + "\033[1;31m");
+            console.error("\x1B[1;31m" + 'Case ' + (i + 1) + ': failed | ' + 'input = ' + caseList[i].input + "\x1B[1;31m");
         } else {
             if (showProcess) {
                 console.info("\x1B[32m" + 'Case ' + (i + 1) + ': success | ' + 'input = ' + caseList[i].input + "\x1B[0m");
@@ -135,44 +152,45 @@ function runCaseList(lexer, caseList, showProcess) {
 if (argShowProcess) {
     console.log("command=\"node test/main.js " + args.join(" ") + "\"");
 }
-if (argTestType === 3) {
-    let npmEntry = require(rootDirectory+"index.js");
 
-    // require testFile
-    eval(fs.readFileSync(testDirectory + argTestFile, 'utf8').toString());
-
-    // define lexer
-    let lexer = null;
-    if (argLang === 'c') {
-        lexer = npmEntry.cLexer;
-    } else if (argLang === 'sql') {
-        lexer = npmEntry.sqlLexer;
-    }
-
-    // define caseList
-    let caseList = returnCaseList();
-
-    // run caseList
-    runCaseList(lexer, caseList, argShowProcess);
-
-} else if (argTestType === 2) {
-    // require package/{lang}-lexer.min.js file
-    eval(fs.readFileSync(packageDirectory + argLang + '/' + argLang + '-lexer.min.js', 'utf8').toString());
-
-    // require testFile
-    eval(fs.readFileSync(testDirectory + argTestFile, 'utf8').toString());
-
-    // define caseList
-    let caseList = returnCaseList();
-
-    // run caseList
-    runCaseList(lexer, caseList, argShowProcess);
-} else if (argTestType === 1) {
+if (argTestType === 1) {
+    // ==================== Unit Testing ====================
     // require package/{lang}-define.min.js file
     eval(fs.readFileSync(packageDirectory + argLang + '/' + argLang + '-define.min.js', 'utf8').toString());
 
+    // require test/unit/{lang}-define_test.js file
+    eval(fs.readFileSync(testDirectory + argTestFile, 'utf8').toString());
+
+    // run unit testing
+    runUnitTesting(argShowProcess);
+} else if (argTestType === 2) {
+    // ==================== Automated Testing ====================
+    // require package/{lang}-lexer.min.js file
+    eval(fs.readFileSync(packageDirectory + argLang + '/' + argLang + '-lexer.min.js', 'utf8').toString());
+
+    // require test/auto/{lang}-lexer_test.js file
+    eval(fs.readFileSync(testDirectory + argTestFile, 'utf8').toString());
+
+    // create caseList
+    let caseList = returnCaseList();
+
+    // run caseList
+    runCaseList(lexer, caseList, argShowProcess);
+} else if (argTestType === 3) {
+    // ==================== Npm Testing ====================
+    // require index.js to get npm package exports (cLexer, sqlLexer)
+    let npmEntry = require(rootDirectory + "index.js");
+
     // require testFile
     eval(fs.readFileSync(testDirectory + argTestFile, 'utf8').toString());
 
-    runUnitTesting(argShowProcess);
+    // create caseList
+    let caseList = returnCaseList();
+
+    // run caseList
+    if (argLang === 'c') {
+        runCaseList(npmEntry.cLexer, caseList, argShowProcess);
+    } else if (argLang === 'sql') {
+        runCaseList(npmEntry.sqlLexer, caseList, argShowProcess);
+    }
 }
