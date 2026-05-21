@@ -60,7 +60,7 @@ const ENUM_CONST = {
     T_SYMBOL: 3,
     T_WHITESPACE: 4,
     T_LINEFEED: 5,
-    KEYWORD: 6,
+    T_KEYWORD: 6,
     T_IDENTIFIER: 7,
     T_NUMBER: 8,
     T_FLOAT: 9,

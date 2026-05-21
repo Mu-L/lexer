@@ -58,10 +58,17 @@
 项目。
 
 ### <span id="13">(3) 解决方案</span>
-```lexer```主要通过以下两个JS文件，实现词法分析器与语言的解耦
+```lexer```主要通过以下两个JS文件，实现词法分析器与语言的解耦。`lexer.js` 是执行引擎，`{lang}-define.js` 是语言规则，两者分工明确：
 
-- ```/src/lexer.js```文件是词法分析器的核心，主要分为```ISR```（输入流读取器）和```DFA```（有限状态自动机），代码会保持在300行内
+- ```/src/lexer.js```文件是词法分析器的核心，主要分为```ISR```（输入流读取器）和```DFA```（有限状态自动机），代码会保持在300行内，极其清晰易懂
 - ```/src/lang/{lang}-define.js```文件是词法分析器的扩展，支持不同语言的接入，如```/src/lang/c-define.js```文件
+  - `ENUM_CONST` — 所有枚举值：Token 类型、DFA 状态编号、运算符/符号字符
+  - `CHARSET_CONST` — 字符集分类：哪些字符是运算符、哪些是符号、关键字列表等
+  - `DFA_STATE_CONST` — DFA 状态常量（引用 ENUM_CONST 中的状态值）
+  - `tool` — 工具函数：字符分类判断、Token 类型推导、环境判断
+  - `flowModel` — DFA 状态流转模型：实现 `getNextState(ch, state)` 状态转移函数，并记录每步流转日志
+
+整体的核心执行流程，请查看[核心流程图](/doc/explain-1.x.md#36)部分
 
 ## <span id="2">2、功能介绍</span>
 

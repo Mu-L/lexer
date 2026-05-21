@@ -56,10 +56,17 @@ In order to focus on the working principle of lexical analyzer , not to consider
 
 ### <span id="13">(3) Solution</span>
 
-```lexer``` through the following two files, realize the decoupling of lexical analyzer and language
+```lexer``` realizes the decoupling of lexical analyzer and language through the following two JS files. `lexer.js` is the execution engine, `{lang}-define.js` is the language rule set, and their responsibilities are clearly separated:
 
-- ```src/lexer.js``` is the core part of lexical analyzer within 300 lines, including ```ISR``` and ```DFA```
-- ```src/lang/{lang}-define.js```is the language extension of lexical analyzer. Support different languages，such as ```src/lang/c-define.js```
+- ```src/lexer.js``` is the core of the lexical analyzer, kept within 300 lines and split into ```ISR``` (Input Stream Reader) and ```DFA``` (Deterministic Finite Automaton) — extremely clear and easy to understand
+- ```src/lang/{lang}-define.js``` is the language extension of the lexical analyzer, supporting different languages such as ```src/lang/c-define.js```
+  - `ENUM_CONST` — All enum values: token types, DFA state numbers, operator/symbol characters
+  - `CHARSET_CONST` — Character set classifications: which characters are operators, symbols, keywords, etc.
+  - `DFA_STATE_CONST` — DFA state constants (references values from `ENUM_CONST`)
+  - `tool` — Utility functions: character type checks, token type inference, environment detection
+  - `flowModel` — DFA state transition model: implements `getNextState(ch, state)` and records each step as a log entry
+
+For the overall core execution flow, please refer to the [Core Flowchart](/doc/explain-1.x.md#36) section
 
 ## <span id="2">2、Features</span>
 

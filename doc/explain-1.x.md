@@ -18,6 +18,7 @@
 - &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[3、ISR介绍](#33)
 - &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[4、DFA介绍](#34)
 - &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[5、时间复杂度](#35)
+- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6、核心流程图](#36)
 - [四、开发实践](#4)
 - &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[1、快速开始](#41)
 - &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[2、语法细节调整](#42)
@@ -156,6 +157,29 @@ let flowModel = {
 - ```ISR```需要依次读入字符直到读取结束，时间复杂度为```O(N)```
 
 所以```lexer```时间复杂度为```O(N)```，即耗时会随着字符串输入的增加而线性增长
+
+### <span id="36">6、核心流程图</span>
+
+```lexer```的工作原理，如以下核心流程图所示。
+
+```mermaid
+flowchart TD
+    A(["lexer.start()"]) --> B["1. resetDefault()\n重置 ISR / DFA / flowModel"]
+    B --> C["2. ISR.before(stream)\n前置处理，包括压缩连续换行，记录字符串长度等"]
+    C --> D["3. ISR.read()\n逐字符驱动 DFA 状态机"]
+    D --> E{读取下一个字符 ch}
+    E --> F["flowModel.getNextState()\nch + currentState → nextState\n由 define.js 实现"]
+    F --> G{nextState == S_RESET?}
+    G -- 否：未匹配结束，继续向下一状态流转 --> H["flowtoNextState()\n1. ch 加入 matchs 数组\n2. state = nextState"]
+    H -- 继续字符匹配--> E
+    G -- 是：DFA状态进入重置状态，表示 Token 匹配结束 --> I["produceToken()\n1. matchs 数组的所有内容拼成 value\n2. tool.judgeTokenType() 推导value对应的token类型\n3. 生成 Token 存入 tokens\n4. 清空 matchs 数组 \n flowtoResetState()\n 1. state 回到 S_RESET"]
+    I --> J{还有字符?}
+    J -- 是 --> E
+    J -- 否 --> K[4. ISR.after\n过滤忽略的 Token（比如空白符这种）]
+    K --> L([输出结果])
+    L --> M[lexer.DFA.result.tokens\nToken 列表]
+    L --> N[flowModel.result.paths\nDFA 状态流转日志]
+```
 
 ## <span id="4">四、开发实践</span>
 
