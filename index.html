@@ -359,16 +359,16 @@
     let mode = "text/plain";
     if (lang === 'c') {
         mode = "text/x-csrc";
-        document.write('<script src="./package/c-lexer.min.js"><\/script>');
+        document.write('<script src="./package/c/c-lexer.min.js"><\/script>');
         document.write('<script src="./test/auto/c-lexer_test.js"><\/script>');
     } else if (lang === 'sql') {
         mode = "text/x-sql";
         $('.lang-choose-sql').addClass('lang-choose-select');
-        document.write('<script src="./package/sql-lexer.min.js"><\/script>');
+        document.write('<script src="./package/sql/sql-lexer.min.js"><\/script>');
         document.write('<script src="./test/auto/sql-lexer_test.js"><\/script>');
     } else if (lang === 'goal') {
         $('.lang-choose-goal').addClass('lang-choose-select');
-        document.write('<script src="./package/goal-lexer.min.js"><\/script>');
+        document.write('<script src="./package/goal/goal-lexer.min.js"><\/script>');
         document.write('<script src="./test/auto/goal-lexer_test.js"><\/script>');
     } else {
         window.location.href = window.location.pathname + '?lang=c';

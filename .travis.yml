@@ -5,8 +5,8 @@ node_js:
 
 script:
   - npm install uglify-js -g
-  - bash shell/pack.sh
-  - bash shell/test.sh
+  - bash package/pack.sh
+  - bash test/test.sh
 
 branches:
   only:

@@ -64,7 +64,7 @@ if (argTestType === 3) {
 
 } else if (argTestType === 2) {
     // require package/{lang}-lexer.min.js file
-    eval(fs.readFileSync(packageDirectory + argLang + '-lexer.min.js', 'utf8').toString());
+    eval(fs.readFileSync(packageDirectory + argLang + '/' + argLang + '-lexer.min.js', 'utf8').toString());
 
     // require testFile
     eval(fs.readFileSync(testDirectory + argTestFile, 'utf8').toString());
@@ -76,7 +76,7 @@ if (argTestType === 3) {
     runCaseList(lexer, caseList, argShowProcess);
 } else if (argTestType === 1) {
     // require package/{lang}-define.min.js file
-    eval(fs.readFileSync(packageDirectory + argLang + '-define.min.js', 'utf8').toString());
+    eval(fs.readFileSync(packageDirectory + argLang + '/' + argLang + '-define.min.js', 'utf8').toString());
 
     // require testFile
     eval(fs.readFileSync(testDirectory + argTestFile, 'utf8').toString());

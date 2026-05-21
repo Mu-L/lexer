@@ -8,18 +8,18 @@ let lexerFileCode = fs.readFileSync(srcDirectory + 'lexer.js').toString();
 let extensions = [
     {
         file: srcDirectory + 'lang/c-define.js',
-        define_min_file: packageDirectory + 'c-define.min.js',
-        lexer_min_file: packageDirectory + 'c-lexer.min.js'
+        define_min_file: packageDirectory + 'c/c-define.min.js',
+        lexer_min_file: packageDirectory + 'c/c-lexer.min.js'
     },
     {
         file: srcDirectory + 'lang/sql-define.js',
-        define_min_file: packageDirectory + 'sql-define.min.js',
-        lexer_min_file: packageDirectory + 'sql-lexer.min.js'
+        define_min_file: packageDirectory + 'sql/sql-define.min.js',
+        lexer_min_file: packageDirectory + 'sql/sql-lexer.min.js'
     },
     {
         file: srcDirectory + 'lang/goal-define.js',
-        define_min_file: packageDirectory + 'goal-define.min.js',
-        lexer_min_file: packageDirectory + 'goal-lexer.min.js'
+        define_min_file: packageDirectory + 'goal/goal-define.min.js',
+        lexer_min_file: packageDirectory + 'goal/goal-lexer.min.js'
     },
 ];
 for (let extension of extensions) {
@@ -37,7 +37,7 @@ for (let extension of extensions) {
     ];
     let code = arr.join("");
     fs.writeFile(extension.lexer_min_file, code, function (err) {
-        console.log(err);
+        if (err) console.error(err);
     });
 
     // create {lang}-define.min.js file
@@ -55,6 +55,6 @@ for (let extension of extensions) {
     ];
     code = arr.join("");
     fs.writeFile(extension.define_min_file, code, function (err) {
-        console.log(err);
+        if (err) console.error(err);
     });
 }
