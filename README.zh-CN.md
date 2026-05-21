@@ -26,7 +26,6 @@
 - &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(1) 问题现状](#11)
 - &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(2) 项目萌芽](#12)
 - &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(3) 解决方案](#13)
-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(4) 核心原理](#14)
 - [2、功能介绍](#2)
 - &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(1) 完整的词法分析](#21)
 - &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(2) 支持多语言扩展](#22)
