@@ -49,13 +49,14 @@
  *   GitHub Pages demo page).
  */
 
+let fs = require('fs');
 let packageDirectory = __dirname + '/package/';
 
-require(packageDirectory + 'c/c-lexer.min.js');
-let cLexer = global.lexer;
+eval(fs.readFileSync(packageDirectory + 'c-lexer.min.js', 'utf8').toString());
+let cLexer = lexer;
 
-require(packageDirectory + 'sql/sql-lexer.min.js');
-let sqlLexer = global.lexer;
+eval(fs.readFileSync(packageDirectory + 'sql-lexer.min.js', 'utf8').toString());
+let sqlLexer = lexer;
 
 module.exports = {
     cLexer: cLexer,
