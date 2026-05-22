@@ -199,7 +199,7 @@ flowchart TD
 
 单元测试用于验证各语言扩展的词法定义（常量、工具函数等）是否正确，测试文件位于 `test/unit/` 目录下，如 `c-define_test.js`。
 
-测试文件中实现 `runUnitTesting(showProcess)` 函数，函数内部直接访问由 `{lang}-define.min.js` 暴露到全局的 `tool`、`flowModel` 等对象：
+在单元测试文件中，需要实现 `runUnitTesting(showProcess)` 函数，函数内部直接访问由 `{lang}-define.min.js` 暴露到全局的 `tool`、`flowModel` 等对象：
 
 ```js
 function runUnitTesting(showProcess) {
