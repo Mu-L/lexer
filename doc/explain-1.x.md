@@ -30,14 +30,37 @@
 
 ## <span id="1">一、项目结构</span>
 
-- ```/doc``` 存放项目文档、图片等资源
-- ```/lang``` 存放不同语言的配置定义，如```c-define.js```
-- ```/index.html``` 词法分析器的在线效果演示
-- ```/lexer.js``` 词法分析器的核心文件
+```
+lexer/
+├── src/                    # 源码目录（仅供开发使用，阅读与修改，不对外直接使用）
+│   ├── lexer.js            #   词法分析器核心
+│   └── lang/               #   各语言扩展定义
+│       ├── c-define.js
+│       ├── goal-define.js
+│       └── sql-define.js
+├── package/                # 打包产物目录（所有上层使用均基于此目录）
+│   ├── pack.sh             #   打包脚本
+│   ├── main.js             #   打包入口
+│   ├── c/
+│   │   ├── c-define.min.js #   C语言定义包（含常量、工具函数、FlowModel）
+│   │   └── c-lexer.min.js  #   C语言词法分析包（含完整词法分析能力）
+│   ├── sql/  ...           #   SQL语言同上
+│   └── goal/ ...           #   Goal语言同上
+├── test/                   # 测试目录（使用 package/ 中的产物，不直接引用 src/）
+│   ├── test.sh             #   一键执行全部测试
+│   ├── main.js             #   测试入口
+│   ├── unit/               #   单元测试用例
+│   └── auto/               #   自动化测试用例
+├── index.js                # npm 包入口（基于 package/ 产物对外暴露）
+├── index.html              # 在线演示页面（使用 package/ 中的产物，不直接引用 src/）
+└── doc/                    # 文档与图片资源
+```
+
+> **重要约定**：`src/` 是内部源码，仅用于开发与修改。**测试、打包、NPM 等所有上层使用，均基于 `package/` 目录下的打包产物（`*.min.js`），不直接依赖 `src/` 源码。**
 
 ## <span id="2">二、语言扩展</span>
 
-实现语言扩展的方式很简单，创建一个```/lang/{lang}-define.js```文件，然后按照如下步骤操作
+实现语言扩展的方式很简单，在 `src/lang/` 目录下创建一个 `{lang}-define.js` 文件，然后按照如下步骤操作。完成后通过 `bash package/pack.sh` 打包，生成 `package/{lang}/` 下的产物供上层使用。
 
 ### <span id="21">1、定义常量</span>
 
@@ -61,7 +84,7 @@ const DFA_STATE_CONST = [];
 - ```getFirstCharState(ch)``` 如果是```双字符首位符```则返回对应的```state```，否则返回```S_RESET```重置状态
 - ```getSecondCharState(ch)``` 如果是```双字符次位符```则返回对应的```state```，否则返回```S_RESET```重置状态
 
-> 如何实现和PHP一样关键字不区分大小写的效果呢？很简单，在```judgeTokenTypeByValue(value)```函数中将Value转小写进行比较即可，可以参考```/lang/sql-define.js```中的实现
+> 如何实现和PHP一样关键字不区分大小写的效果呢？很简单，在```judgeTokenTypeByValue(value)```函数中将Value转小写进行比较即可，可以参考 `src/lang/sql-define.js` 中的实现
 
 ### <span id="23">3、定义自动化测试用例</span>
 
@@ -123,12 +146,11 @@ let flowModel = {
 
 ### <span id="31">1、模块构成</span>
 
-```lexer.js```文件中定义的```lexer```变量即是词法分析器核心，它主要有以下两部分构成
+`src/lexer.js` 是词法分析器的核心源码文件（不对外直接使用，打包后以 `{lang}-lexer.min.js` 的形式对外提供），其中定义的 `lexer` 变量即是词法分析器核心，它主要有以下两部分构成
 - ISR（Input Stream Reader）输入流读取器
 - DFA（Deterministic finite automaton）有限状态自动机
 
 其它的如```resetDefault()```和```start()```等方法都是```lexer```对外提供的交互接口，不属于词法分析器的核心模块，不在讨论范畴
-
 ### <span id="32">2、各司其职</span>
 
 词法分析器首先需要读取输入的字符串，然后才能做相应处理，所以```ISR```负责整个输入流读取的控制，```DFA```负责判断应当对当前输入的字符序列做什么相应操作
@@ -183,7 +205,7 @@ flowchart TD
 
 ### <span id="41">1、快速开始</span>
 
-如需要新增一个```Y语言```的扩展，复制```c-define.js```文件并命名为```y-define.js```，再修改```CHARSET_CONST.KEYWORD```中定义的```关键字```即可。
+如需要新增一个```Y语言```的扩展，复制 `src/lang/c-define.js` 文件并命名为 `src/lang/y-define.js`，再修改```CHARSET_CONST.KEYWORD```中定义的```关键字```即可。完成后执行 `bash package/pack.sh` 打包，即可在 `package/y/` 目录下得到对应的产物。
 
 如果没有调整语言细节的需求，截止到当前步骤```Y语言的扩展```已经完成啦~
 
@@ -193,11 +215,13 @@ flowchart TD
 
 不同语言的语法细节是不同的，比如PHP语言中支持```===```或```!===```三个符号的运算符，PHP只有```String```类型，没有```Char```类型等等，这些都是与C语言不同的
 
-如果有调整语言细节的需求，建议参考根据[《第二节》](#2)中的讲解，去修改源码。
+如果有调整语言细节的需求，建议参考根据[《第二节》](#2)中的讲解，去修改 `src/lang/{lang}-define.js` 源码，修改完毕后重新打包。
 
 ### <span id="43">3、单元测试</span>
 
 单元测试用于验证各语言扩展的词法定义（常量、工具函数等）是否正确，测试文件位于 `test/unit/` 目录下，如 `c-define_test.js`。
+
+> 单元测试加载的是 `package/{lang}/{lang}-define.min.js` 打包产物，而非 `src/` 源码。执行前请确保已完成打包。
 
 在单元测试文件中，需要实现 `runUnitTesting(showProcess)` 函数，函数内部直接访问由 `{lang}-define.min.js` 暴露到全局的 `tool`、`flowModel` 等对象：
 
@@ -227,6 +251,8 @@ bash test/test.sh
 
 自动化测试用于对大量输入字符串执行词法分析，验证输出 Token 是否符合预期，测试文件位于 `test/auto/` 目录下，如 `c-lexer_test.js`。
 
+> 自动化测试同样基于 `package/` 目录下的打包产物运行，不直接依赖 `src/` 源码。
+
 测试分为两种模式：
 - **类型 2**：直接加载 `{lang}-lexer.min.js` 运行词法分析（验证打包产物）
 - **类型 3**：通过 `require('index.js')` 模拟 npm 包使用方式（验证 npm 包导出）
@@ -244,4 +270,4 @@ node test/main.js c 3 auto/c-lexer_test.js 1
 bash test/test.sh
 ```
 
-> 注意：执行自动化测试前，需确保已运行 `bash package/pack.sh` 生成最新的 min.js 打包产物，否则测试的是旧版本代码。
+> 注意：执行测试前，需确保已运行 `bash package/pack.sh` 生成最新的打包产物，否则测试的是旧版本代码。测试与打包均不直接使用 `src/` 源码。
