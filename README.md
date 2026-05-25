@@ -31,7 +31,7 @@
 - [3、Get project](#3)
 - [4、Ussage](#4)
 - &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(1) In your project](#41)
-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(2) Web preview and testing](#42)
+- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(2) Web preview](#42)
 - [5、Contributions](#5)
 - &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(1) Project Statistics](#51)
 - &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(2) Branch Introduction](#52)
@@ -158,7 +158,7 @@ The [Provide state flow log](#23) part in features，visit ```flowModel.result.p
 ]
 ```
 
-### <span id="42">(2) Web preview and testing</span>
+### <span id="42">(2) Web preview</span>
 
 In order to preview the process of ```lexer``` in real time, to debug and test, there is a ```index.html``` file in the root directory of this project. Open it directly in your browser, and after entering the code will automatically output the ```Token``` generated after ```lexer``` analysis, as shown in the figure below
 
