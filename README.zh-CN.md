@@ -33,7 +33,7 @@
 - [3、获取项目](#3)
 - [4、使用方式](#4)
 - &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(1) 在项目中使用](#41)
-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(2) 可视化预览与测试](#42)
+- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(2) 可视化预览](#42)
 - [5、参与贡献](#5)
 - &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(1) 项目统计](#51)
 - &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(2) 分支介绍](#52)
@@ -140,7 +140,7 @@ parsedTokens.forEach((token) => {
 ]
 ```
 
-### <span id="42">(2) 可视化预览与测试</span>
+### <span id="42">(2) 可视化预览</span>
 
 为了实时查看```lexer```的工作效果，也方便对其进行开发测试，在项目根目录下有一个```index.html```文件，直接在浏览器中打开，输入代码后会自动输出经过```lexer```分析后生成的```Token```，如下图所演示
 
