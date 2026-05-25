@@ -56,7 +56,36 @@ lexer/
 └── doc/                    # 文档与图片资源
 ```
 
-> **重要约定**：`src/` 是内部源码，仅用于开发与修改。**测试、打包、NPM 等所有上层使用，均基于 `package/` 目录下的打包产物（`*.min.js`），不直接依赖 `src/` 源码。**
+关于src目录、package目录、test目录等关系，其结构图如下所示。
+
+> **重要约定**：
+> 1. `src/`：是内部源码目录，仅用于开发与修改，不对外直接使用。
+> 2. `package/`：是所有上层使用的基础目录，**测试、打包、NPM 等所有上层使用，均基于 `package/` 目录下的打包产物（`*.min.js`），不直接依赖 `src/` 源码。**
+> 3. `index.js/index.html`：均基于 `package/` 目录
+> 4. `test/`：是测试目录。通过引入`package/`目录文件对test/unit的单测目录和test/auto的自动化测试目录进行测试，也通过引入根目录`index.js`测试 NPM 包。
+
+```mermaid
+graph LR
+    subgraph "源码"
+        src[src/]
+    end
+    
+    subgraph "打包产物"
+        package[package/<br/>*.min.js]
+    end
+    
+    subgraph "对外使用"
+        npm[index.js<br/>NPM 包]
+        demo[index.html<br/>演示页面]
+        test[test/<br/>测试用例]
+    end
+    
+    src -.->|打包| package
+    package --> npm
+    package --> demo
+    package --> test
+    npm --> test
+```
 
 ## <span id="2">二、语言扩展</span>
 
